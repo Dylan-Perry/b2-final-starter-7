@@ -6,10 +6,10 @@ class Coupon < ApplicationRecord
                         :status,
                         :merchant_id
 
-  validates_uniqueness_of :coupon_code, scope: :merchant_id
+  validates_uniqueness_of :coupon_code
 
   belongs_to :merchant
-  belongs_to :invoice, optional: true
+  has_many :invoices
 
   enum discount_type: [:dollars, :percent]
   enum status: [:active, :inactive]
