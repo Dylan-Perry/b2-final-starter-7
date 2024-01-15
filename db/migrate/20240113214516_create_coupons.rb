@@ -6,11 +6,11 @@ class CreateCoupons < ActiveRecord::Migration[7.0]
       t.integer :discount_amount
       t.integer :discount_type
       t.references :merchant, foreign_key: true
-      t.references :invoice, optional: true, foreign_key: true
+      t.references :invoices, foreign_key: true
 
       t.timestamps
     end
 
-    add_index :coupons, [:coupon_code, :merchant_id], unique: true
+    add_index :coupons, :coupon_code, unique: true
   end
 end

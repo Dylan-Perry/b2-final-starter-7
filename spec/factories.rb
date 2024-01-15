@@ -7,6 +7,7 @@ FactoryBot.define do
   factory :invoice do
     status {[0,1,2].sample}
     association :customer
+    association :coupon
   end
 
   factory :merchant do
@@ -44,6 +45,5 @@ FactoryBot.define do
     discount_amount {Faker::Number.number(digits: 2)}
     discount_type {[0,1].sample}
     association :merchant
-    association :invoice
   end
 end

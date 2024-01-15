@@ -1,1 +1,14 @@
 <%= render partial: "shared/nav" %>
+
+<body>
+  <div class="row">
+    <p class='col-12'><%= @coupon.name %></p>
+  </div>
+
+
+  <p><%= @coupon.coupon_code %></p><br/>
+
+  <p>Discount: <%= @coupon.discount_amount %> <%= @coupon.discount_type %> off</p>
+  <p>Status: <%= @coupon.status %></p>
+  <p>Times Used: <%= @coupon.times_used %></p>
+</body>

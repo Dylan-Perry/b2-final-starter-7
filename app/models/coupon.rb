@@ -6,11 +6,19 @@ class Coupon < ApplicationRecord
                         :status,
                         :merchant_id
 
-  validates_uniqueness_of :coupon_code, scope: :merchant_id
+  validates_uniqueness_of :coupon_code
 
   belongs_to :merchant
-  belongs_to :invoice, optional: true
+  has_many :invoices
+  has_many :transactions, through: :invoices
 
   enum discount_type: [:dollars, :percent]
   enum status: [:active, :inactive]
+
+  def times_used
+    invoices
+      .joins(:transactions)
+      .where("transactions.result = 1")
+      .count
+  end
 end
