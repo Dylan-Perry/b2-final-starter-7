@@ -10,5 +10,7 @@ class CreateCoupons < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :coupons, [:coupon_code, :merchant_id], unique: true
   end
 end

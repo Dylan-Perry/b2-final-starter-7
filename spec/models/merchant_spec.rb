@@ -168,5 +168,18 @@ describe Merchant do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
+
+    it "five_or_more_activated_coupons?" do
+      @coupon1 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 10, discount_type: 0)
+      @coupon2 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+      @coupon3 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+      @coupon4 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+
+      expect(@merchant1.five_or_more_activated_coupons?).to eq(false)
+
+      @coupon5 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+
+      expect(@merchant1.five_or_more_activated_coupons?).to eq(true)
+    end
   end
 end

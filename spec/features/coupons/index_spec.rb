@@ -43,7 +43,7 @@ RSpec.describe "coupons index" do
 
     @coupon1 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 10, discount_type: 0)
     @coupon2 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
-    @coupon3 = create(:coupon, merchant_id: @merchant2.id, discount_amount: 20)
+    @coupon3_alt_merchant = create(:coupon, merchant_id: @merchant2.id, discount_amount: 20)
 
     visit merchant_coupons_path(@merchant1)
   end
@@ -57,30 +57,51 @@ RSpec.describe "coupons index" do
     # Where I see all of my coupon names including their amount off
     # And each coupon's name is also a link to its show page.
 
-      it "shows the merchant name" do
-        expect(page).to have_content(@merchant1.name)
-      end
+    it "shows the merchant name" do
+      expect(page).to have_content(@merchant1.name)
+    end
+  
+    it "shows the names of all the merchant's coupons" do
+      expect(page).to have_content(@coupon1.name)
+      expect(page).to have_content(@coupon2.name)
+      expect(page).to_not have_content(@coupon3_alt_merchant.name)
+    end
+  
+    it "shows the discount amount and discount type of all the merchant's coupons" do
+      expect(page).to have_content("Discount: #{@coupon1.discount_amount} #{@coupon1.discount_type} off")
+      expect(page).to have_content("Discount: #{@coupon2.discount_amount} #{@coupon2.discount_type} off")
+      expect(page).to_not have_content("Discount: #{@coupon3_alt_merchant.discount_amount} #{@coupon3_alt_merchant.discount_type} off")
+    end
+  
+    it "shows links to each coupon's show page on the coupon's name" do
+      expect(page).to have_link("#{@coupon1.name}")
+      expect(page).to have_link("#{@coupon2.name}")
+      expect(page).to_not have_link("#{@coupon3_alt_merchant.name}")
+  
+      click_link("#{@coupon1.name}", match: :first)
+      expect(current_path).to eq(merchant_coupon_path(merchant_id: @merchant1.id, id: @coupon1.id))
+    end
+  end
+
+  describe "User Story 2: Merchant Coupon Create" do
+    # As a merchant
+    # When I visit my coupon index page
+    # I see a link to create a new coupon.
+    # When I click that link
+    # I am taken to a new page where I see a form to add a new coupon.
+    # When I fill in that form with a name, unique code, an amount, and whether that amount is a percent or a dollar amount
+    # And click the Submit button
+    # I'm taken back to the coupon index page
+    # And I can see my new coupon listed.
+
+    # *** Sad Paths to consider:
+
+    # This Merchant already has 5 active coupons
+    # Coupon code entered is NOT unique**
     
-      it "shows the names of all the merchant's coupons" do
-        expect(page).to have_content(@coupon1.name)
-        expect(page).to have_content(@coupon2.name)
-        expect(page).to_not have_content(@coupon3.name)
-      end
-    
-      it "shows the discount amount and discount type of all the merchant's coupons" do
-        save_and_open_page
-        expect(page).to have_content("Discount: #{@coupon1.discount_amount} #{@coupon1.discount_type} off")
-        expect(page).to have_content("Discount: #{@coupon2.discount_amount} #{@coupon2.discount_type} off")
-        expect(page).to_not have_content("Discount: #{@coupon3.discount_amount} #{@coupon3.discount_type} off")
-      end
-    
-      it "shows links to each coupon's show page on the coupon's name" do
-        expect(page).to have_link("#{@coupon1.name}")
-        expect(page).to have_link("#{@coupon2.name}")
-        expect(page).to_not have_link("#{@coupon3.name}")
-    
-        click_link("#{@coupon1.name}", match: :first)
-        expect(current_path).to eq(merchant_coupon_path(merchant_id: @merchant1.id, id: @coupon1.id))
-      end
+    it "has a link to create a new coupon" do
+      click_link "Create New Coupon"
+      expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+    end
   end
 end

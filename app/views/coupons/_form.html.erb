@@ -1,0 +1,11 @@
+<%= form_with model: model, method: method, url: url, class: 'merchant_coupon_form', local: true do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br/><br/>
+  <%= f.label :coupon_code %>
+  <%= f.text_field :coupon_code %><br/><br/>
+  <%= f.label :discount_amount %>
+  <%= f.number_field :discount_amount %><br/><br/>
+  <%= f.label :discount_type %>
+  <%= f.select :discount_type, options_for_select(Coupon.discount_types.map {|key, value| [key.titleize, Coupon.discount_types.key(value)]}) %><br/><br/>
+  <%= f.submit 'Submit'%>
+<% end %>
