@@ -14,6 +14,7 @@ describe Coupon do
   describe "relationships" do
     it { should belong_to :merchant }
     it { should have_many :invoices }
+    it { should have_many(:transactions).through(:invoices) }
   end
   
   describe "enums" do
