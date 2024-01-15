@@ -11,6 +11,7 @@ class Coupon < ApplicationRecord
   belongs_to :merchant
   has_many :invoices
   has_many :transactions, through: :invoices
+  has_many :invoice_items, through: :invoices
 
   enum discount_type: [:dollars, :percent]
   enum status: [:active, :inactive]
@@ -20,5 +21,9 @@ class Coupon < ApplicationRecord
       .joins(:transactions)
       .where("transactions.result = 1")
       .count
+  end
+
+  def pending_invoices?
+    self.invoice_items.where(status: 0).exists?
   end
 end

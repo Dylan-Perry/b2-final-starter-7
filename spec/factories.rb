@@ -31,7 +31,6 @@ FactoryBot.define do
   end
 
   factory :invoice_item do
-    status {[0,1,2].sample}
     quantity { [1,2,3,4,5].sample }
     unit_price { item.unit_price }
     status { [0,1,2].sample }
