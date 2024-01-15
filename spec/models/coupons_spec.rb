@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'helper_methods'
 
 describe Coupon do
   describe "validations" do
@@ -37,5 +38,15 @@ describe Coupon do
 
     expect{ Coupon.create!(name: "Coupon", coupon_code: "BOGO14", discount_amount: 5, discount_type: 1, merchant_id: merchant1.id) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Coupon code has already been taken")
     expect{ Coupon.create!(name: "Coupon", coupon_code: "BOGO14", discount_amount: 5, discount_type: 1, merchant_id: merchant2.id) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Coupon code has already been taken")
+  end
+
+  describe "instance methods" do
+    it "times_used" do
+      load_test_data_us_3
+
+      expect(@coupon1.times_used).to eq 4
+      expect(@coupon2.times_used).to eq 1
+      expect(@coupon3.times_used).to eq 0
+    end
   end
 end

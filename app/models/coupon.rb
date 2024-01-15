@@ -14,4 +14,11 @@ class Coupon < ApplicationRecord
 
   enum discount_type: [:dollars, :percent]
   enum status: [:active, :inactive]
+
+  def times_used
+    invoices
+      .joins(:transactions)
+      .where("transactions.result = 1")
+      .count
+  end
 end
