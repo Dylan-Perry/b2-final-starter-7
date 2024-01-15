@@ -6,9 +6,12 @@
   </div>
 
 
-  <p><%= @coupon.coupon_code %></p><br/>
-
+  <p>Code: <%= @coupon.coupon_code %></p>
   <p>Discount: <%= @coupon.discount_amount %> <%= @coupon.discount_type %> off</p>
-  <p>Status: <%= @coupon.status %></p>
+  <p>Status: <%= @coupon.status.capitalize %></p>
   <p>Times Used: <%= @coupon.times_used %></p>
+  <%= button_to "Deactivate", merchant_coupon_status_path(@merchant, @coupon), method: :patch, params: {status: "inactive"} %>
+
+  <%# <strong><%= link_to "Update Item", edit_merchant_item_path(@merchant, @item) %></strong> %>
+
 </body>

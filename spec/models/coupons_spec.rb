@@ -16,6 +16,7 @@ describe Coupon do
     it { should belong_to :merchant }
     it { should have_many :invoices }
     it { should have_many(:transactions).through(:invoices) }
+    it { should have_many(:invoice_items).through(:invoices) }
   end
   
   describe "enums" do
@@ -47,6 +48,13 @@ describe Coupon do
       expect(@coupon1.times_used).to eq 4
       expect(@coupon2.times_used).to eq 1
       expect(@coupon3.times_used).to eq 0
+    end
+
+    it "pending_invoices?" do
+      load_test_data_us_4
+
+      expect(@coupon1.pending_invoices?).to eq false
+      expect(@coupon2.pending_invoices?).to eq true
     end
   end
 end
