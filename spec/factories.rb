@@ -39,7 +39,7 @@ FactoryBot.define do
   end
 
   factory :coupon do
-    name {Faker::Hobby.activity}
+    name {Faker::Lorem.words}
     coupon_code {Faker::Alphanumeric.alphanumeric(number: 6, min_alpha: 3, min_numeric: 3)}
     discount_amount {Faker::Number.number(digits: 2)}
     discount_type {[0,1].sample}
