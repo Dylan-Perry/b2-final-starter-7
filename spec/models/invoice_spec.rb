@@ -24,5 +24,37 @@ RSpec.describe Invoice, type: :model do
 
       expect(@invoice_1.total_revenue).to eq(100)
     end
+
+    describe "discounted_revenue (User Story 7)" do
+      it "subtracts dollar amount from total revenue when coupon type is dollar" do
+        @merchant1 = Merchant.create!(name: 'Hair Care')
+        @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+        @item_8 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
+        @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+        @coupon_dollars = create(:coupon, discount_amount: 5, discount_type: 0)
+        @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_dollars.id, created_at: "2012-03-27 14:54:09")
+        @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+        @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 6, unit_price: 10, status: 1)
+
+        expect(@invoice_1.total_revenue).to eq(150)
+
+        expect(@invoice_1.discounted_revenue).to eq(145)
+      end
+
+      it "subtracts percent from total revenue when coupon type is percent" do
+        @merchant1 = Merchant.create!(name: 'Hair Care')
+        @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+        @item_8 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
+        @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+        @coupon_percent = create(:coupon, discount_amount: 5, discount_type: 1)
+        @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_percent.id, created_at: "2012-03-27 14:54:09")
+        @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+        @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 6, unit_price: 10, status: 1)
+
+        expect(@invoice_1.total_revenue).to eq(150)
+
+        expect(@invoice_1.discounted_revenue).to eq(142.5)
+      end
+    end
   end
 end
