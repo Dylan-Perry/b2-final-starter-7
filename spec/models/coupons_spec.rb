@@ -25,10 +25,10 @@ describe Coupon do
   end
 
   describe "defaults" do
-    it "should default status to active (enum 0)" do
+    it "should default status to inactive (enum 1)" do
       coupon = create(:coupon)
 
-      expect(coupon.status).to eq "active"
+      expect(coupon.status).to eq "inactive"
     end
   end
 

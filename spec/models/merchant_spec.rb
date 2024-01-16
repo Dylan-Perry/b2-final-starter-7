@@ -170,14 +170,15 @@ describe Merchant do
     end
 
     it "five_or_more_activated_coupons?" do
-      @coupon1 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 10, discount_type: 0)
-      @coupon2 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
-      @coupon3 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
-      @coupon4 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+      @coupon1 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+      @coupon2 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+      @coupon3 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+      @coupon4 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+
 
       expect(@merchant1.five_or_more_activated_coupons?).to eq(false)
 
-      @coupon5 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+      @coupon4 = create(:coupon, merchant_id: @merchant1.id, status: 0)
 
       expect(@merchant1.five_or_more_activated_coupons?).to eq(true)
     end

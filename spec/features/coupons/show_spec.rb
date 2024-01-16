@@ -14,9 +14,9 @@ describe "merchant coupons show page (User Story 3 and 4)" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
-    @coupon1 = create(:coupon, merchant_id: @merchant1.id)
-    @coupon2 = create(:coupon, merchant_id: @merchant1.id)
-    @coupon3 = create(:coupon, merchant_id: @merchant1.id)
+    @coupon1 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+    @coupon2 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+    @coupon3 = create(:coupon, merchant_id: @merchant1.id, status: 0)
   end
 
   it "can see all the coupon's attributes including name, coupon code, discount amount + type, and status" do
@@ -95,5 +95,24 @@ describe "merchant coupons show page (User Story 3 and 4)" do
     coupon = Coupon.find(@coupon2.id)
     expect(coupon.status).to eq("active")
     expect(page).to have_content("Error: Can't deactivate coupon with pending invoices.")
+  end
+
+  it "won't activate a coupon if merchant already has 5 active coupons" do
+    load_test_data_us_4
+    @coupon3 = create(:coupon, coupon_code: "code3", merchant_id: @merchant1.id, status: 0)
+    @coupon4 = create(:coupon, coupon_code: "code4", merchant_id: @merchant1.id, status: 0)
+    @coupon5 = create(:coupon, coupon_code: "code5", merchant_id: @merchant1.id, status: 0)
+    
+    visit merchant_coupon_path(@merchant1, @coupon1)
+    
+    click_button "Deactivate"
+
+    @coupon6 = create(:coupon, coupon_code: "code6", merchant_id: @merchant1.id, status: 0)
+
+    click_button "Activate"
+
+    coupon = Coupon.find(@coupon1.id)
+    expect(coupon.status).to eq("inactive")
+    expect(page).to have_content("Error: Merchant already has 5 active coupons.")
   end
 end

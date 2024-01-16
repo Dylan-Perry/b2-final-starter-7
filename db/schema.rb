@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_15_185156) do
     t.bigint "invoices_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "status", default: 0
+    t.integer "status", default: 1
     t.index ["coupon_code"], name: "index_coupons_on_coupon_code", unique: true
     t.index ["invoices_id"], name: "index_coupons_on_invoices_id"
     t.index ["merchant_id"], name: "index_coupons_on_merchant_id"
