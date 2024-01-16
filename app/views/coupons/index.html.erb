@@ -19,7 +19,7 @@
           <section id="coupon-<%= coupon.id %>">
             <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %>
             - Discount: <%= coupon.discount_amount %> <%= coupon.discount_type %> off
-            <%= button_to "Deactivate", merchant_coupon_status_path(@merchant, coupon), method: :patch, params: {status: "inactive"} %></li>
+            <%= button_to "Deactivate", merchant_coupon_status_path(@merchant, coupon), method: :patch, params: {status: "inactive", source: "index"} %></li>
           </section>
           <% end %>
         </p>
@@ -40,7 +40,7 @@
           <section id="coupon-<%= coupon.id %>">
             <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %>
             - Discount: <%= coupon.discount_amount %> <%= coupon.discount_type %> off
-            <%= button_to "Activate", merchant_coupon_status_path(@merchant, coupon), method: :patch, params: {status: "active"} %></li>
+            <%= button_to "Activate", merchant_coupon_status_path(@merchant, coupon), method: :patch, params: {status: "active", source: "index"} %></li>
           </section>
           <% end %>
         </p>
