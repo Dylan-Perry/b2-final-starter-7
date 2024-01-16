@@ -29,8 +29,8 @@ end
 def load_test_data_us_4
     @merchant1 = Merchant.create!(name: "Hair Care")
 
-    @coupon1 = create(:coupon, coupon_code: "BOGO14", merchant_id: @merchant1.id)
-    @coupon2 = create(:coupon, coupon_code: "flarpo", merchant_id: @merchant1.id)
+    @coupon1 = create(:coupon, coupon_code: "BOGO14", merchant_id: @merchant1.id, status: 0)
+    @coupon2 = create(:coupon, coupon_code: "flarpo", merchant_id: @merchant1.id, status: 0)
 
     @invoice1 = create(:invoice, coupon_id: @coupon1.id)
     @invoice2 = create(:invoice, coupon_id: @coupon1.id)
