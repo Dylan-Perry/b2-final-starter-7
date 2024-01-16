@@ -29,8 +29,8 @@ end
 def load_test_data_us_4
     @merchant1 = Merchant.create!(name: "Hair Care")
 
-    @coupon1 = create(:coupon, coupon_code: "BOGO14", merchant_id: @merchant1.id, status: 0)
-    @coupon2 = create(:coupon, coupon_code: "flarpo", merchant_id: @merchant1.id, status: 0)
+    @coupon1 = create(:coupon, coupon_code: "BOGO14", merchant_id: @merchant1.id, status: 1)
+    @coupon2 = create(:coupon, coupon_code: "flarpo", merchant_id: @merchant1.id, status: 1)
 
     @invoice1 = create(:invoice, coupon_id: @coupon1.id)
     @invoice2 = create(:invoice, coupon_id: @coupon1.id)
@@ -47,4 +47,14 @@ def load_test_data_us_4
     @invoice_item6 = create(:invoice_item, item_id: @item.id, invoice_id: @invoice3.id, status: 1)
     @invoice_item7 = create(:invoice_item, item_id: @item.id, invoice_id: @invoice4.id, status: 0) # Sad path: pending status prevents @coupon2 from deactivating
     @invoice_item8 = create(:invoice_item, item_id: @item.id, invoice_id: @invoice4.id, status: 1)
+end
+
+def load_test_data_6
+    @coupon1 = create(:coupon, merchant_id: @merchant1.id)
+    @coupon2 = create(:coupon, merchant_id: @merchant1.id, status: 1)
+    @coupon3 = create(:coupon, merchant_id: @merchant1.id, status: 1)
+
+    @coupon4 = create(:coupon, merchant_id: @merchant2.id)
+    @coupon5 = create(:coupon, merchant_id: @merchant2.id)
+    @coupon6 = create(:coupon, merchant_id: @merchant2.id, status: 1)
 end

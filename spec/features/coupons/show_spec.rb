@@ -14,9 +14,9 @@ describe "merchant coupons show page (User Story 3 and 4)" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
-    @coupon1 = create(:coupon, merchant_id: @merchant1.id, status: 0)
-    @coupon2 = create(:coupon, merchant_id: @merchant1.id, status: 0)
-    @coupon3 = create(:coupon, merchant_id: @merchant1.id, status: 0)
+    @coupon1 = create(:coupon, merchant_id: @merchant1.id, status: 1)
+    @coupon2 = create(:coupon, merchant_id: @merchant1.id, status: 1)
+    @coupon3 = create(:coupon, merchant_id: @merchant1.id, status: 1)
   end
 
   it "can see all the coupon's attributes including name, coupon code, discount amount + type, and status" do

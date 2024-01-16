@@ -10,7 +10,11 @@ class CouponStatusController < ApplicationController
       else
         @coupon.update(coupon_status_params)
         flash.notice = "Coupon '#{@coupon.name}' deactivated."
-        redirect_to merchant_coupon_path
+        if params[:source] == "index"
+          redirect_to merchant_coupons_path
+        else
+          redirect_to merchant_coupon_path
+        end
       end
     elsif params[:status] == "active"
       if @merchant.five_or_more_activated_coupons?
@@ -19,7 +23,11 @@ class CouponStatusController < ApplicationController
       else
         @coupon.update(coupon_status_params)
         flash.notice = "Coupon '#{@coupon.name}' activated!"
-        redirect_to merchant_coupon_path
+        if params[:source] == "index"
+          redirect_to merchant_coupons_path
+        else
+          redirect_to merchant_coupon_path
+        end
       end
     end
   end

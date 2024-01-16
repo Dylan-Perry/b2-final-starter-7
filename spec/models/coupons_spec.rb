@@ -21,11 +21,11 @@ describe Coupon do
   
   describe "enums" do
     it { should define_enum_for(:discount_type).with_values([:dollars, :percent]) }
-    it { should define_enum_for(:status).with_values([:active, :inactive]) }
+    it { should define_enum_for(:status).with_values([:inactive, :active]) }
   end
 
   describe "defaults" do
-    it "should default status to inactive (enum 1)" do
+    it "should default status to inactive (enum 0)" do
       coupon = create(:coupon)
 
       expect(coupon.status).to eq "inactive"

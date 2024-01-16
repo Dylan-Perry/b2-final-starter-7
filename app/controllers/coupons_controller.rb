@@ -3,7 +3,8 @@ class CouponsController < ApplicationController
   before_action :find_coupon_and_merchant, only: [:show]
 
   def index
-    @coupons = @merchant.coupons
+    @active_coupons = @merchant.active_coupons
+    @inactive_coupons = @merchant.inactive_coupons
   end
 
   def show

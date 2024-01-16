@@ -31,8 +31,8 @@ describe "Merchant Coupon New" do
       click_button "Submit"
 
       expect(current_path).to eq(merchant_coupons_path(@merchant1))
-
-      within("#coupons") do
+      
+      within("#inactive") do
         expect(page).to have_content("20 percent off")
       end
     end

@@ -1,4 +1,5 @@
 require "rails_helper"
+require "helper_methods"
 
 RSpec.describe "coupons index" do
   before :each do
@@ -42,7 +43,7 @@ RSpec.describe "coupons index" do
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
     @coupon1 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 10, discount_type: 0)
-    @coupon2 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1)
+    @coupon2 = create(:coupon, merchant_id: @merchant1.id, discount_amount: 5, discount_type: 1, status: 1)
     @coupon3_alt_merchant = create(:coupon, merchant_id: @merchant2.id, discount_amount: 20)
 
     visit merchant_coupons_path(@merchant1)
@@ -102,6 +103,70 @@ RSpec.describe "coupons index" do
     it "has a link to create a new coupon" do
       click_link "Create New Coupon"
       expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+    end
+  end
+
+  describe "User Story 6: Merchant Coupon Index Sorted" do
+    # As a merchant
+    # When I visit my coupon index page
+    # I can see that my coupons are separated between active and inactive coupons.
+
+    it "has a section for inactive coupons" do
+      load_test_data_6
+
+      visit merchant_coupons_path(@merchant1)
+
+      within("#inactive") do
+        expect(page).to have_content(@coupon1.name)
+        expect(page).to_not have_content(@coupon2.name)
+        expect(page).to_not have_content(@coupon3.name)
+      end
+
+      visit merchant_coupons_path(@merchant2)
+
+      within("#inactive") do
+        expect(page).to have_content(@coupon4.name)
+        expect(page).to have_content(@coupon5.name)
+        expect(page).to_not have_content(@coupon6.name)
+      end
+    end
+  
+    it "has a section for active coupons" do
+      load_test_data_6
+
+      visit merchant_coupons_path(@merchant1)
+
+      within("#active") do
+        expect(page).to_not have_content(@coupon1.name)
+        expect(page).to have_content(@coupon2.name)
+        expect(page).to have_content(@coupon3.name)
+      end
+
+      visit merchant_coupons_path(@merchant2)
+
+      within("#active") do
+      expect(page).to_not have_content(@coupon4.name)
+      expect(page).to_not have_content(@coupon5.name)
+      expect(page).to have_content(@coupon6.name)
+      end
+    end
+
+    it "can make a button to activate/deactivate coupons" do
+      within("#coupon-#{@coupon1.id}") do
+        click_button "Activate"
+  
+        coupon1 = Coupon.find(@coupon1.id)
+        expect(coupon1.status).to eq("active")
+      end
+
+      visit merchant_coupons_path(@merchant1)
+
+      within("#coupon-#{@coupon2.id}") do
+        click_button "Deactivate"
+  
+        coupon2 = Coupon.find(@coupon2.id)
+        expect(coupon2.status).to eq("inactive")
+      end
     end
   end
 end
