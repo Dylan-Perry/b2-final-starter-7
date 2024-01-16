@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'helper_methods'
 
 describe Merchant do
   describe "validations" do
@@ -181,6 +182,20 @@ describe Merchant do
       @coupon4 = create(:coupon, merchant_id: @merchant1.id, status: 0)
 
       expect(@merchant1.five_or_more_activated_coupons?).to eq(true)
+    end
+
+    it "active_coupons" do
+      load_test_data_6
+
+      expect(@merchant1.active_coupons.sort).to eq([@coupon2, @coupon3].sort)
+      expect(@merchant2.active_coupons.sort).to eq([@coupon6])
+    end
+
+    it "inactive_coupons" do 
+      load_test_data_6
+
+      expect(@merchant1.inactive_coupons.sort).to eq([@coupon1])
+      expect(@merchant2.inactive_coupons.sort).to eq([@coupon4, @coupon5].sort)
     end
   end
 end

@@ -14,7 +14,7 @@ class Coupon < ApplicationRecord
   has_many :invoice_items, through: :invoices
 
   enum discount_type: [:dollars, :percent]
-  enum status: [:active, :inactive]
+  enum status: [:inactive, :active]
 
   def times_used
     invoices

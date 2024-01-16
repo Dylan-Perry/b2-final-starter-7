@@ -7,12 +7,40 @@
 
   <p><%= link_to "Create New Coupon", new_merchant_coupon_path(@merchant) %></p>
 
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="column-header">
+        <p>Active Coupons</p>
+      </div>
+
     <ul>
-      <section id="coupons">
-        <p><% @coupons.each do |coupon| %>
+      <section id="active">
+        <p><% @active_coupons.each do |coupon| %>
           <section id="coupon-<%= coupon.id %>">
             <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %>
-            - Discount: <%= coupon.discount_amount %> <%= coupon.discount_type %> off</li>
+            - Discount: <%= coupon.discount_amount %> <%= coupon.discount_type %> off
+            <%= button_to "Deactivate", merchant_coupon_status_path(@merchant, coupon), method: :patch, params: {status: "inactive"} %></li>
+          </section>
+          <% end %>
+        </p>
+      </section>
+    </ul>
+
+    </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="column-header">
+        <p>Inactive Coupons</p>
+      </div>
+
+    <ul>
+      <section id="inactive">
+        <p><% @inactive_coupons.each do |coupon| %>
+          <section id="coupon-<%= coupon.id %>">
+            <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %>
+            - Discount: <%= coupon.discount_amount %> <%= coupon.discount_type %> off
+            <%= button_to "Activate", merchant_coupon_status_path(@merchant, coupon), method: :patch, params: {status: "active"} %></li>
           </section>
           <% end %>
         </p>
