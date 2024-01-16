@@ -100,4 +100,26 @@ RSpec.describe "invoices show" do
     end
   end
 
+  it "shows the discounted revenue (grand total revenue) after a coupon is applied (User Story 7)" do
+    # As a merchant
+    # When I visit one of my merchant invoice show pages
+    # I see the subtotal for my merchant from this invoice (that is, the total that does not include coupon discounts)
+    # And I see the grand total revenue after the discount was applied
+    # And I see the name and code of the coupon used as a link to that coupon's show page.
+
+    @merchant1 = Merchant.create!(name: 'Hair Care')
+    @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+    @item_8 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
+    @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+    @coupon_dollars = create(:coupon, discount_amount: 5, discount_type: 0)
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_dollars.id, created_at: "2012-03-27 14:54:09")
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 6, unit_price: 10, status: 1)
+
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content(@invoice_1.discounted_revenue)
+    save_and_open_page
+  end
+
 end
