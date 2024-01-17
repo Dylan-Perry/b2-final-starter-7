@@ -101,6 +101,5 @@ describe "Admin Invoices Index Page" do
     visit admin_invoice_path(@invoice_1)
 
     expect(page).to have_link("#{@coupon_dollars.name} (#{@coupon_dollars.coupon_code})")
-    save_and_open_page
   end
 end
