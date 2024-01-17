@@ -6,28 +6,20 @@ class CouponStatusController < ApplicationController
     if params[:status] == "inactive"
       if @coupon.pending_invoices?
         flash.notice = "Error: Can't deactivate coupon with pending invoices."
-        redirect_to merchant_coupon_path
+        determine_redirect     
       else
         @coupon.update(coupon_status_params)
-        flash.notice = "Coupon '#{@coupon.name}' deactivated."
-        if params[:source] == "index"
-          redirect_to merchant_coupons_path
-        else
-          redirect_to merchant_coupon_path
-        end
+        flash.notice = "Coupon '#{@coupon.name}' deactivated!"
+        determine_redirect
       end
     elsif params[:status] == "active"
       if @merchant.five_or_more_activated_coupons?
         flash.notice = "Error: Merchant already has 5 active coupons."
-        redirect_to merchant_coupon_path
+        determine_redirect     
       else
         @coupon.update(coupon_status_params)
         flash.notice = "Coupon '#{@coupon.name}' activated!"
-        if params[:source] == "index"
-          redirect_to merchant_coupons_path
-        else
-          redirect_to merchant_coupon_path
-        end
+        determine_redirect
       end
     end
   end
@@ -35,5 +27,13 @@ class CouponStatusController < ApplicationController
   private
   def coupon_status_params
     params.permit(:status)
+  end
+
+  def determine_redirect
+    if params[:source] == "index"
+      redirect_to merchant_coupons_path
+    else
+      redirect_to merchant_coupon_path
+    end
   end
 end
