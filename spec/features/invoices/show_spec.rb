@@ -118,8 +118,21 @@ RSpec.describe "invoices show" do
 
     visit merchant_invoice_path(@merchant1, @invoice_1)
 
-    expect(page).to have_content(@invoice_1.discounted_revenue)
-    save_and_open_page
+    expect(page).to have_content("Grand Total Revenue: #{@invoice_1.discounted_revenue}")
   end
 
+  it "has a link to the coupon's show page on the coupon's name and coupon code" do
+    @merchant1 = Merchant.create!(name: 'Hair Care')
+    @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+    @item_8 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
+    @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+    @coupon_dollars = create(:coupon, discount_amount: 5, discount_type: 0)
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_dollars.id, created_at: "2012-03-27 14:54:09")
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 6, unit_price: 10, status: 1)
+    
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_link("#{@coupon_dollars.name} (#{@coupon_dollars.coupon_code})")
+  end
 end
