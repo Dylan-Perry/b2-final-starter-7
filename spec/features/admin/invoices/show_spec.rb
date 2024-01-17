@@ -69,4 +69,38 @@ describe "Admin Invoices Index Page" do
       expect(@i1.status).to eq("completed")
     end
   end
+
+  it "shows the discounted revenue (grand total revenue) after a coupon is applied (User Story 8)" do
+    # (User story 8) As an admin
+    # When I visit one of my admin invoice show pages
+    # I see the name and code of the coupon that was used (if there was a coupon applied)
+    # And I see both the subtotal revenue from that invoice (before coupon) and the grand total revenue (after coupon) for this invoice.
+
+    # Alternate Paths to consider:
+    # There may be invoices with items from more than 1 merchant. Coupons for a merchant only apply to items from that merchant.
+    # When a coupon with a dollar-off value is used with an invoice with multiple merchants' items, 
+    # the dollar-off amount applies to the total amount even though there may be items present from another merchant.
+
+    load_test_data_8
+
+    visit admin_invoice_path(@invoice_1)
+
+    expect(page).to have_content("Grand Total Revenue: #{@invoice_1.discounted_revenue}")
+  end
+
+  it "has a link to the coupon's show page on the coupon's name and coupon code" do
+    @merchant1 = Merchant.create!(name: 'Hair Care')
+    @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+    @item_8 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
+    @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+    @coupon_dollars = create(:coupon, discount_amount: 5, discount_type: 0)
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_dollars.id, created_at: "2012-03-27 14:54:09")
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 6, unit_price: 10, status: 1)
+    
+    visit admin_invoice_path(@invoice_1)
+
+    expect(page).to have_link("#{@coupon_dollars.name} (#{@coupon_dollars.coupon_code})")
+    save_and_open_page
+  end
 end

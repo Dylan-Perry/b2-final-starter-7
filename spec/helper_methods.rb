@@ -58,3 +58,24 @@ def load_test_data_6
     @coupon5 = create(:coupon, merchant_id: @merchant2.id)
     @coupon6 = create(:coupon, merchant_id: @merchant2.id, status: 1)
 end
+
+def load_test_data_8
+    @merchant1 = Merchant.create!(name: 'Hair Care')
+    @merchant2 = Merchant.create!(name: 'Chair Care')
+
+    @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+    @item_2 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
+    @item_3 = Item.create!(name: "Wood Soap", description: "This washes your chair", unit_price: 10, merchant_id: @merchant2.id, status: 1)
+    @item_4 = Item.create!(name: "Chair Clip", description: "This holds up your chair but in a clip", unit_price: 5, merchant_id: @merchant2.id)
+
+    @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+
+    @coupon_percent = create(:coupon, discount_amount: 5, discount_type: 1, merchant_id: @merchant1.id)
+
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon_percent.id, created_at: "2012-03-27 14:54:09")
+
+    @invoice_item_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+    @invoice_item_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 6, unit_price: 10, status: 1)
+    @invoice_item_3 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_3.id, quantity: 9, unit_price: 10, status: 2)
+    @invoice_item_4 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_4.id, quantity: 6, unit_price: 10, status: 1)
+end
